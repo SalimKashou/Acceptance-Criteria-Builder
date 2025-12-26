@@ -47,11 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let attachments = [];
 
-  // Default: Lean
-  let detailLevel = "lean"; // 'outline' | 'lean' | 'balanced' | 'exhaustive'
-  let formatStyle = "simple"; // 'simple' | 'gherkin'
+  // Defaults
+  let detailLevel = "lean";     // 'outline' | 'lean' | 'balanced' | 'exhaustive'
+  let formatStyle = "simple";   // 'simple' | 'gherkin'
 
-  const THEME_KEY = "ac_builder_theme";
+  const THEME_KEY = "ac_promptsmith_theme";
 
   function setPressed(theme){
     const isDark = theme === "dark";
@@ -203,11 +203,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const meta = document.createElement("div");
       meta.className = "fileMeta";
-      if (a.kind === "file") {
-        meta.textContent = `${a.type || "unknown"} • ${humanFileSize(a.size || 0)}`;
-      } else {
-        meta.textContent = a.url ? a.url : "(no URL)";
-      }
+      if (a.kind === "file") meta.textContent = `${a.type || "unknown"} • ${humanFileSize(a.size || 0)}`;
+      else meta.textContent = a.url ? a.url : "(no URL)";
 
       left.appendChild(nameLine);
       left.appendChild(meta);
@@ -527,6 +524,7 @@ ${attBlock}
   fSimple.addEventListener("click", () => setFormat("simple"));
   fGherkin.addEventListener("click", () => setFormat("gherkin"));
 
+  // Upload files incrementally
   attachmentsEl.addEventListener("change", () => {
     const selected = Array.from(attachmentsEl.files || []);
     if (selected.length === 0) return;
@@ -609,9 +607,16 @@ ${attBlock}
       storyEl.focus();
       return;
     }
+
     const prompt = buildCopilotPrompt();
     const ok = await copyToClipboard(prompt);
-    toast(ok ? "Copied prompt. Paste into Copilot Chat." : "Clipboard blocked. Please allow clipboard permissions.", !ok);
+
+    toast(
+      ok
+        ? "Prompt copied. Paste into Copilot Chat to generate Acceptance Criteria."
+        : "Clipboard blocked. Please allow clipboard permissions.",
+      !ok
+    );
   });
 
   clearBtn.addEventListener("click", () => {
