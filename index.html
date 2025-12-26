@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACB: Acceptance Criteria Builder</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <div class="headerWrap">
+    <header class="header">
+      <div>
+        <h1>Acceptance Criteria Builder</h1>
+        <p class="subtext">Copilot flow: Copy prompt → paste into Copilot Chat → generate AC</p>
+        <div class="statusline" aria-live="polite">
+          <span id="s1" class="pill bad">Step 1: User story required</span>
+          <span id="s2" class="pill warn">Step 2–3: Optional</span>
+          <span id="s3" class="pill warn">Step 4: Locked</span>
+        </div>
+      </div>
+
+      <div class="topActions">
+        <div class="themeToggle" role="group" aria-label="Theme">
+          <button id="lightBtn" class="iconBtn" type="button" aria-pressed="true" title="Light mode" aria-label="Light mode">☼</button>
+          <span class="divider" aria-hidden="true"></span>
+          <button id="darkBtn" class="iconBtn" type="button" aria-pressed="false" title="Dark mode" aria-label="Dark mode">☾</button>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <main class="container contentStart">
+    <section class="card" aria-labelledby="story-title" id="card1">
+      <div class="card-header">
+        <h2 id="story-title">1) User Story</h2>
+        <p class="hint">Required. Paste any user story format (AS A / I want / so that preferred).</p>
+      </div>
+      <label class="label" for="story">User Story (required)</label>
+      <textarea id="story" rows="7" placeholder="AS A [persona]
+I want [capability]
+so that [benefit]"></textarea>
+    </section>
+
+    <section class="card" aria-labelledby="context-title" id="card2" aria-disabled="true">
+      <div class="card-header">
+        <h2 id="context-title">2) Additional Context (optional)</h2>
+        <p class="hint">Unlocks after you enter a User Story. Add rules, edge cases, constraints.</p>
+      </div>
+      <label class="label" for="context">Additional Context</label>
+      <textarea id="context" rows="7" placeholder="Example: Validate required fields. If no servicer is assigned, show overall wait time only. Add audit trail entries..."></textarea>
+
+      <div class="chips" aria-label="Criteria focus areas">
+        <label class="chip"><input type="checkbox" id="chkValidation" checked /> Validation & errors</label>
+        <label class="chip"><input type="checkbox" id="chkPermissions" /> Permissions & roles</label>
+        <label class="chip"><input type="checkbox" id="chkAudit" /> Audit/logging</label>
+        <label class="chip"><input type="checkbox" id="chkPerformance" /> Performance</label>
+        <label class="chip"><input type="checkbox" id="chkAccessibility" /> Accessibility</label>
+        <label class="chip"><input type="checkbox" id="chkAnalytics" /> Analytics/Tracking</label>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="attachments-title" id="card3" aria-disabled="true">
+      <div class="card-header">
+        <h2 id="attachments-title">3) Attachments (optional)</h2>
+        <p class="hint">
+          Add attachments by uploading files (optional) or pasting a link (OneDrive, Figma, etc).
+          Copilot prompt will include links.
+        </p>
+      </div>
+
+      <div class="grid2">
+        <div>
+          <label class="label" for="attachments">Add files (optional)</label>
+          <input id="attachments" type="file" multiple />
+          <p class="tinyHint">Adding files won’t remove existing ones. Images will show thumbnails.</p>
+        </div>
+
+        <div>
+          <label class="label" for="linkUrl">Add attachment link (OneDrive, Figma, etc.)</label>
+          <input id="linkUrl" type="url" placeholder="Paste link here (https://...)" />
+          <div class="actions" style="margin-top:10px">
+            <button id="addLinkBtn" class="secondary" type="button" disabled>Add link</button>
+          </div>
+          <p class="tinyHint">Tip: Paste a Figma file link or OneDrive share link directly — no upload needed.</p>
+        </div>
+      </div>
+
+      <div class="actions" style="margin-top:10px">
+        <button id="clearAttachmentsBtn" class="dangerBtn" type="button" disabled>Remove all attachments</button>
+      </div>
+
+      <div id="attachmentList" class="fileList" aria-live="polite"></div>
+      <p id="attachMeta" class="fileMeta"></p>
+    </section>
+
+    <section class="card" aria-labelledby="prompt-title" id="card4" aria-disabled="true">
+      <div class="card-header">
+        <h2 id="prompt-title">4) Generate using Copilot</h2>
+        <p class="hint">Pick mode + detail + format, then copy into Copilot Chat.</p>
+      </div>
+
+      <div class="grid2">
+        <div>
+          <label class="label" for="mode">Prompt mode</label>
+          <select id="mode">
+            <option value="user" selected>User Oriented</option>
+            <option value="tech">Tech Stack Focused</option>
+          </select>
+          <p class="tinyHint" id="modeHint"></p>
+        </div>
+
+        <div>
+          <label class="label">Detail level</label>
+          <div class="segmented" role="group" aria-label="Detail level">
+            <button id="dOutline" class="segBtn" type="button" aria-pressed="false">Outline</button>
+            <button id="dLean" class="segBtn" type="button" aria-pressed="true">Lean</button>
+            <button id="dBalanced" class="segBtn" type="button" aria-pressed="false">Balanced</button>
+            <button id="dExhaustive" class="segBtn" type="button" aria-pressed="false">Exhaustive</button>
+          </div>
+          <p class="tinyHint" id="detailHint"></p>
+
+          <label class="label" style="margin-top:12px;">Criteria format</label>
+          <div class="segmented" role="group" aria-label="Criteria format">
+            <button id="fSimple" class="segBtn" type="button" aria-pressed="true">Simple</button>
+            <button id="fGherkin" class="segBtn" type="button" aria-pressed="false">Gherkin</button>
+          </div>
+          <p class="tinyHint" id="formatHint"></p>
+        </div>
+      </div>
+
+      <div class="actions" style="margin-top:10px">
+        <button id="copyPromptBtn" class="primary" type="button" disabled>Copy Copilot Prompt</button>
+        <button id="clearBtn" class="ghost" type="button">Clear all</button>
+      </div>
+
+      <p class="toast" id="promptToast" role="status" aria-live="polite"></p>
+    </section>
+
+    <footer class="footer">
+      <small>
+        Local-only. No keys. Copilot prompt generator. Version 1.0. Created by
+        <a href="https://github.com/SalimKashou" target="_blank" rel="noopener noreferrer">Salim Kashou</a>
+        using ChatGPT. Not for profit.
+      </small>
+    </footer>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
