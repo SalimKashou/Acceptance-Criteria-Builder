@@ -1,15 +1,17 @@
-# ACB: Acceptance Criteria Builder
+# AC PromptSmith
 
-ACB is a lightweight, local-only web app that helps Product Managers and teams generate **high-quality Acceptance Criteria** by producing a structured **Copilot prompt** from:
+AC PromptSmith is a lightweight, local-only web app that helps Product Managers and teams craft **high-quality Copilot prompts** to generate **Acceptance Criteria**.
+
+You provide:
 - a User Story (required),
 - optional Additional Context, and
-- optional Attachments (file uploads and/or OneDrive/Figma links).
+- optional Attachments (file uploads and/or OneDrive/Figma links),
 
-You copy the generated prompt into Copilot Chat and get consistent, testable acceptance criteria back.
+then copy the generated prompt into Copilot Chat to produce consistent, testable AC.
 
-## Why ACB?
+## Why AC PromptSmith?
 
-Writing strong AC can be time-consuming and inconsistent across teams. ACB standardizes the inputs and generates a prompt that:
+Writing strong AC can be time-consuming and inconsistent across teams. AC PromptSmith standardizes the inputs and generates a prompt that:
 - enforces testable, specific requirements
 - avoids generic “works correctly” criteria
 - supports different levels of detail
